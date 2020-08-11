@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#0A5385</color>
+    <color name="colorAccent">#00BCD4</color>
+
+    <color name="white_translucent">#AAFFFFFF</color>
+    <color name="black_translucent">#ee000000</color>
+    <color name="border">@color/white_translucent</color>
+    <color name="guideline">@color/white_translucent</color>
+    <color name="corner">@android:color/holo_green_light</color>
+    <color name="surrounding_area">#000000</color>
+
+
+</resources>
