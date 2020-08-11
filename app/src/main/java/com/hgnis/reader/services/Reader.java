@@ -56,11 +56,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -220,8 +217,8 @@ public class Reader extends Service implements FloatingViewListener {
         });
 
         mFloatingViewManager = new FloatingViewManager(this, this);
-        mFloatingViewManager.setFixedTrashIconImage(R.drawable.ic_trash_fixed);
-        mFloatingViewManager.setActionTrashIconImage(R.drawable.ic_trash_action);
+        mFloatingViewManager.setFixedTrashIconImage(R.drawable.trash);
+        //mFloatingViewManager.setActionTrashIconImage(R.drawable.ic_trash_action);
         mFloatingViewManager.setDisplayMode(FloatingViewManager.DISPLAY_MODE_SHOW_ALWAYS);
         mFloatingViewManager.setSafeInsetRect((Rect) intent.getParcelableExtra(EXTRA_CUTOUT_SAFE_AREA));
         final FloatingViewManager.Options options = new FloatingViewManager.Options();
@@ -281,7 +278,6 @@ public class Reader extends Service implements FloatingViewListener {
                 crossArrow.setVisibility(View.GONE);
                 tickArrow.setVisibility(View.GONE);
                 Log.e("clicked", "Image is clicked");
-                Toast.makeText(context, "Please Wait... Reader is reading", Toast.LENGTH_LONG).show();
                 startCapture();
             }
         });
@@ -372,11 +368,7 @@ public class Reader extends Service implements FloatingViewListener {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Random random = new Random();
-                timeStamp = new SimpleDateFormat("yyyyMMddHHmmssmsms").format(new Date()) + random.nextInt(400);
-
                 File outputImage = new File(getCacheDir()/*getExternalFilesDir(null)*/, "image" + ".png");
-
                 FileOutputStream fos = null;
 
                 try {
@@ -416,8 +408,9 @@ public class Reader extends Service implements FloatingViewListener {
     private void loadImageFromStorage(File path, String imageName) {
 
         try {
-            File f = new File(path, "image" + ".png");
+            File f = new File(path, imageName + ".png");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
 
             b.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -431,7 +424,7 @@ public class Reader extends Service implements FloatingViewListener {
             JsonArray jsonArray = new JsonArray();
 
             content.addProperty("content", imageString);
-            type.addProperty("type", "DOCUMENT_TEXT_DETECTION");/*TEXT_DETECTION*/
+            type.addProperty("type", "TEXT_DETECTION");/*TEXT_DETECTION*//*DOCUMENT_TEXT_DETECTION*/
             requests.add("image", content);
             JsonArray array = new JsonArray();
             array.add(type);
@@ -442,7 +435,7 @@ public class Reader extends Service implements FloatingViewListener {
             if (count == 0) {
                 count = count + 1;
                 boolean stat = NetworkUtils.isOnline(this);
-                if (stat == true) {
+                if (stat) {
                     Retrofit.Builder builder = new Retrofit.Builder()
                             .baseUrl("https://vision.googleapis.com/v1/images:annotate/")
                             .addConverterFactory(GsonConverterFactory.create());
