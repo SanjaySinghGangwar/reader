@@ -29,8 +29,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -41,6 +39,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
 import com.google.cloud.translate.Translation;
 import com.google.gson.JsonArray;
@@ -169,7 +170,6 @@ public class Reader extends Service implements FloatingViewListener {
                 }
             }
         });
-
 
     }
 
@@ -513,7 +513,6 @@ public class Reader extends Service implements FloatingViewListener {
             cb = new MediaProjection.Callback() {
                 @Override
                 public void onStop() {
-
                     vdisplay.release();
                 }
             };

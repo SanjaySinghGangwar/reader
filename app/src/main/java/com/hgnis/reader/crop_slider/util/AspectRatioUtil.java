@@ -1,7 +1,8 @@
 package com.hgnis.reader.crop_slider.util;
 
 import android.graphics.RectF;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 public class AspectRatioUtil {
 

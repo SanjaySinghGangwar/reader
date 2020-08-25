@@ -1,7 +1,8 @@
 package com.hgnis.reader.crop_slider.cropwindow.handle;
 
 import android.graphics.RectF;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.hgnis.reader.crop_slider.cropwindow.edge.Edge;
 import com.hgnis.reader.crop_slider.util.AspectRatioUtil;

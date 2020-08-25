@@ -12,12 +12,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.hgnis.reader.R;
 import com.hgnis.reader.services.Reader;
@@ -42,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
     Intent intent;
     NotificationChannel defaultChannel;
     NotificationManager manager;
-
     @BindView(R.id.OPEN)
     Button OPEN;
+
+    /*@BindView(R.id.OPEN)
+    Button OPEN;*/
 
     private MediaProjectionManager mgr;
 

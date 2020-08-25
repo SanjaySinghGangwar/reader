@@ -36,14 +36,17 @@
         </activity>
 
         <service
-            android:name="com.hgnis.reader.services.Reader"
+            android:name=".services.Reader"
             android:enabled="true"
             android:exported="false"
+            android:foregroundServiceType="mediaProjection"
             android:stopWithTask="false" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="orc" />
+
+
     </application>
 
 </manifest>
