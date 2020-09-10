@@ -14,17 +14,14 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.hgnis.reader.R;
 import com.hgnis.reader.services.Reader;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,16 +35,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int CHATHEAD_OVERLAY_PERMISSION_REQUEST_CODE = 100;
     private static final int CUSTOM_OVERLAY_PERMISSION_REQUEST_CODE = 101;
     private static final int REQUEST_SCREENSHOT = 59706;
-    public static List<Intent> sendingIntent = new ArrayList<>();
 
     Intent intent;
     NotificationChannel defaultChannel;
     NotificationManager manager;
     @BindView(R.id.OPEN)
-    Button OPEN;
-
-    /*@BindView(R.id.OPEN)
-    Button OPEN;*/
+    CardView OPEN;
 
     private MediaProjectionManager mgr;
 

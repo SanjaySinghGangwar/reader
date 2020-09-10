@@ -16,7 +16,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
-import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.MediaScannerConnection;
@@ -107,7 +106,6 @@ public class Reader extends Service implements FloatingViewListener {
     int count;
     int Ccounter;
 
-    String key = "AIzaSyA7hQ5A_MnRf2TM2yf0nIO61wdqNKPWgyQ";
 
     private FloatingViewManager mFloatingViewManager;
     private MediaProjection projection;
@@ -188,30 +186,25 @@ public class Reader extends Service implements FloatingViewListener {
         inflater = LayoutInflater.from(this);
         iconView = (CircleImageView) inflater.inflate(R.layout.widget_chathead, null, false);
 
-        iconView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        iconView.setOnClickListener(v -> {
+            tss();
+            count = 0;
+            Ccounter = 0;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-                count = 0;
-                Ccounter = 0;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (usageAccessGranted(context)) {
 
-                    if (usageAccessGranted(context)) {
+                    getCurrentAppForegound();
 
-                        getCurrentAppForegound();
-
-                        if (defaultHomePackageName.equalsIgnoreCase(currentForegroundPackageName)) {
-                            Toast.makeText(context, "No App is in Foreground", Toast.LENGTH_LONG).show();
-                        } else {
-
-
-                            createLayoutForServiceClass();
-                        }
+                    if (defaultHomePackageName.equalsIgnoreCase(currentForegroundPackageName)) {
+                        Toast.makeText(context, "No App is in Foreground", Toast.LENGTH_LONG).show();
                     } else {
-                        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                        intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                        createLayoutForServiceClass();
                     }
+                } else {
+                    Intent intent1 = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                    intent1.setFlags(FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent1);
                 }
             }
         });
@@ -220,7 +213,7 @@ public class Reader extends Service implements FloatingViewListener {
         mFloatingViewManager.setFixedTrashIconImage(R.drawable.trash);
         //mFloatingViewManager.setActionTrashIconImage(R.drawable.ic_trash_action);
         mFloatingViewManager.setDisplayMode(FloatingViewManager.DISPLAY_MODE_SHOW_ALWAYS);
-        mFloatingViewManager.setSafeInsetRect((Rect) intent.getParcelableExtra(EXTRA_CUTOUT_SAFE_AREA));
+        mFloatingViewManager.setSafeInsetRect(intent.getParcelableExtra(EXTRA_CUTOUT_SAFE_AREA));
         final FloatingViewManager.Options options = new FloatingViewManager.Options();
         options.overMargin = (int) (16 * metrics.density);
         mFloatingViewManager.addViewToWindow(iconView, options);
@@ -264,22 +257,16 @@ public class Reader extends Service implements FloatingViewListener {
         icon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.transparent_image);
         cropImageView.setImageBitmap(icon);
 
-        crossArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("clicked", "Image is clicked");
-                view.setVisibility(View.GONE);
-                iconView.setVisibility(View.VISIBLE);
-            }
+        crossArrow.setOnClickListener(v -> {
+            Log.e("clicked", "Image is clicked");
+            view.setVisibility(View.GONE);
+            iconView.setVisibility(View.VISIBLE);
         });
-        tickArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                crossArrow.setVisibility(View.GONE);
-                tickArrow.setVisibility(View.GONE);
-                Log.e("clicked", "Image is clicked");
-                startCapture();
-            }
+        tickArrow.setOnClickListener(v -> {
+            crossArrow.setVisibility(View.GONE);
+            tickArrow.setVisibility(View.GONE);
+            Log.e("clicked", "Image is clicked");
+            startCapture();
         });
         windowManager.addView(view, params);
 
@@ -363,12 +350,12 @@ public class Reader extends Service implements FloatingViewListener {
 
     /*Screenshot Code*/
     public void processImage(final byte[] png) {
-
+        File outputImage = new File(getExternalCacheDir()/*getExternalFilesDir(null)*/, "image" + ".png");
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
             public void run() {
-                File outputImage = new File(getCacheDir()/*getExternalFilesDir(null)*/, "image" + ".png");
+                //File outputImage = new File(getCacheDir()/*getExternalFilesDir(null)*/, "image" + ".png");
                 FileOutputStream fos = null;
 
                 try {
@@ -392,8 +379,8 @@ public class Reader extends Service implements FloatingViewListener {
         });
 
         stopCapture();
-
-        loadImageFromStorage(getCacheDir(), "image");
+        loadImageFromStorage(outputImage);
+        //loadImageFromStorage(getCacheDir(), "image");
     }
 
     private void hideViews() {
@@ -405,14 +392,12 @@ public class Reader extends Service implements FloatingViewListener {
         iconView.setVisibility(View.VISIBLE);
     }
 
-    private void loadImageFromStorage(File path, String imageName) {
+    private void loadImageFromStorage(File path) {
 
         try {
-            File f = new File(path, imageName + ".png");
+            File f = new File(String.valueOf(path));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-
             b.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
             String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
@@ -450,14 +435,8 @@ public class Reader extends Service implements FloatingViewListener {
                                     try {
                                         Log.i("RestAPI", "VISION " + response.body().getResponses().get(0).getFullTextAnnotation().getText());
                                         extractText = response.body().getResponses().get(0).getFullTextAnnotation().getText();
-                                        if (tss != null) {
-                                            if (tss.isSpeaking()) {
-                                                tss.stop();
-                                            } else {
-                                                tss.speak(extractText, TextToSpeech.QUEUE_FLUSH, null);
+                                        tss();
 
-                                            }
-                                        }
 
                                     } catch (Exception e) {
                                         Toast.makeText(Reader.this, "Try Again " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -487,6 +466,17 @@ public class Reader extends Service implements FloatingViewListener {
         }
 
 
+    }
+
+    private void tss() {
+        if (tss != null) {
+            if (tss.isSpeaking()) {
+                tss.stop();
+            } else {
+                tss.speak(extractText, TextToSpeech.QUEUE_FLUSH, null);
+
+            }
+        }
     }
 
 
