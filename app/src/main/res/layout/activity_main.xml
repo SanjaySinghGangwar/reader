@@ -5,20 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@color/colorPrimary"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".views.activity.MainActivity">
 
+    <ImageView
+        android:id="@+id/OPEN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:layout_weight="9"
+        android:foregroundGravity="center"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.5"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:srcCompat="@drawable/start" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/OPEN"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:foregroundGravity="center"
+        android:visibility="gone"
         card_view:cardBackgroundColor="@color/primary_light"
         card_view:cardCornerRadius="20dp"
-        card_view:cardElevation="30dp"
+        card_view:cardElevation="20dp"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintHorizontal_bias="0.5"
@@ -39,7 +54,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="9"
                 android:foregroundGravity="center"
-                card_view:srcCompat="@drawable/power" />
+                card_view:srcCompat="@drawable/start" />
 
             <TextView
                 android:id="@+id/textView"

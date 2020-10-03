@@ -36,13 +36,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.google.cloud.translate.Translation;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hgnis.reader.R;
@@ -96,13 +94,8 @@ public class Reader extends Service implements FloatingViewListener {
     AppOpsManager appOps;
     UsageStatsManager usm;
     String defaultHomePackageName, currentForegroundPackageName;
-    View view2;
-    Translation translation;
-    String translatedText;
-    TextView resultTV;
     String extractText;
     TextToSpeech tss;
-    ImageView textToSpeak;
     int count;
     int Ccounter;
 
@@ -187,6 +180,7 @@ public class Reader extends Service implements FloatingViewListener {
         iconView = (CircleImageView) inflater.inflate(R.layout.widget_chathead, null, false);
 
         iconView.setOnClickListener(v -> {
+            extractText = "";
             tss();
             count = 0;
             Ccounter = 0;
@@ -197,7 +191,7 @@ public class Reader extends Service implements FloatingViewListener {
                     getCurrentAppForegound();
 
                     if (defaultHomePackageName.equalsIgnoreCase(currentForegroundPackageName)) {
-                        Toast.makeText(context, "No App is in Foreground", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Open app where I have to read", Toast.LENGTH_LONG).show();
                     } else {
                         createLayoutForServiceClass();
                     }
@@ -210,7 +204,7 @@ public class Reader extends Service implements FloatingViewListener {
         });
 
         mFloatingViewManager = new FloatingViewManager(this, this);
-        mFloatingViewManager.setFixedTrashIconImage(R.drawable.trash);
+        mFloatingViewManager.setFixedTrashIconImage(R.drawable.recycle_bin);
         //mFloatingViewManager.setActionTrashIconImage(R.drawable.ic_trash_action);
         mFloatingViewManager.setDisplayMode(FloatingViewManager.DISPLAY_MODE_SHOW_ALWAYS);
         mFloatingViewManager.setSafeInsetRect(intent.getParcelableExtra(EXTRA_CUTOUT_SAFE_AREA));

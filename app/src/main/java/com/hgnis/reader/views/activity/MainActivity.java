@@ -14,10 +14,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.hgnis.reader.R;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     NotificationChannel defaultChannel;
     NotificationManager manager;
     @BindView(R.id.OPEN)
-    CardView OPEN;
+    ImageView OPEN;
 
     private MediaProjectionManager mgr;
 
@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     @TargetApi(Build.VERSION_CODES.M)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CHATHEAD_OVERLAY_PERMISSION_REQUEST_CODE) {
             showFloatingView(this, false, false);
         } else if (requestCode == CUSTOM_OVERLAY_PERMISSION_REQUEST_CODE) {
@@ -86,13 +87,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_SCREENSHOT) {
             if (resultCode == RESULT_OK) {
-
                 Reader.resultCode = resultCode;
                 Reader.resultData = (Intent) data.clone();
-
             } else if (resultCode == RESULT_CANCELED) {
-
-                Toast.makeText(MainActivity.this, "Permission to take screenshot is reired", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Permission to take screenshot is required", Toast.LENGTH_SHORT).show();
                 startActivityForResult(mgr.createScreenCaptureIntent(), REQUEST_SCREENSHOT);
             }
         }
@@ -152,4 +150,5 @@ public class MainActivity extends AppCompatActivity {
     public void onViewClicked() {
         showFloatingView(MainActivity.this, true, false);
     }
+
 }

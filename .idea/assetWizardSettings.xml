@@ -102,8 +102,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\gangw\Desktop\photo_2020-08-11_17-47-25.jpg" />
-                                                <entry key="scalingPercent" value="80" />
+                                                <entry key="imagePath" value="C:\Users\gangw\Desktop\reading.png" />
+                                                <entry key="scalingPercent" value="47" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -135,6 +135,12 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="backgroundColor" value="3e464e" />
                                     </map>
                                   </option>
                                 </PersistentState>
