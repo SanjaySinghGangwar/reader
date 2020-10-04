@@ -125,7 +125,9 @@ public class Reader extends Service implements FloatingViewListener {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        sharedPreferences = this.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        APP_SHARED_PREFS = "Tutor";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mgr = (MediaProjectionManager) this.getSystemService(MEDIA_PROJECTION_SERVICE);
             usm = (UsageStatsManager) this.getSystemService(Context.USAGE_STATS_SERVICE);
@@ -140,13 +142,13 @@ public class Reader extends Service implements FloatingViewListener {
 
         tss = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
-                int lang = tss.setLanguage(Locale.getDefault());
+                int lang = tss.setLanguage(Locale.forLanguageTag(sharedPreferences.getString("targetLanguage", ""))/*Locale.getDefault()*/);/*Locale.getDefault()*//*Locale.forLanguageTag("hi")*/
                 tss.setVoice(tss.getVoice());
                 tss.setPitch(1);
                 tss.setSpeechRate(0.9f);
                 if (lang == TextToSpeech.LANG_MISSING_DATA
                         || lang == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Toast.makeText(Reader.this, "Not supported", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Reader.this, "Language Not supported", Toast.LENGTH_SHORT).show();
                     Log.e("TTS", "Language not supported");
                 }
             } else {
@@ -168,7 +170,9 @@ public class Reader extends Service implements FloatingViewListener {
 
         iconView.setOnClickListener(v -> {
             extractText = "";
-            tss();
+            if (tss.isSpeaking()) {
+                tss.stop();
+            }
             count = 0;
             Ccounter = 0;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -289,6 +293,8 @@ public class Reader extends Service implements FloatingViewListener {
         stopCapture();
         Log.e("onDestroyService", "onDestroyService");
         super.onDestroy();
+        tss.stop();
+        tss.shutdown();
     }
 
     @Nullable
@@ -416,17 +422,21 @@ public class Reader extends Service implements FloatingViewListener {
                                     try {
                                         Log.i("RestAPI", "VISION " + response.body().getResponses().get(0).getFullTextAnnotation().getText());
                                         extractText = response.body().getResponses().get(0).getFullTextAnnotation().getText();
+                                        String langCode = response.body().getResponses().get(0).getTextAnnotations().get(0).getLocale();
                                         tss();
+                                        //textToSpeed();
+
                                     } catch (Exception e) {
                                         Toast.makeText(Reader.this, "Try Again ", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             }
                         }
+
                         @Override
                         public void onFailure(Call<VisionModel> call, Throwable t) {
                             Log.i("TAG", "onFailure: " + t.getLocalizedMessage());
-                            Toast.makeText(Reader.this, "File to large to process !! \n Try Again", Toast.LENGTH_LONG).show();
+                            Toast.makeText(Reader.this, "File to large to process !! \nTry Again", Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
@@ -442,6 +452,20 @@ public class Reader extends Service implements FloatingViewListener {
 
 
     }
+
+    private void textToSpeed() {
+        TextToSpeech textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                if (i != TextToSpeech.ERROR) {
+                    Toast.makeText(context, "yes me", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 
     private void tss() {
         if (tss != null) {

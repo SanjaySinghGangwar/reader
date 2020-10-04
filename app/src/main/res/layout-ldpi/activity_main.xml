@@ -12,8 +12,8 @@
 
     <ImageView
         android:id="@+id/OPEN"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:layout_weight="9"
@@ -37,9 +37,10 @@
         card_view:cardElevation="30dp"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.503"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/OPEN"
-        card_view:layout_constraintVertical_bias="0.396">
+        card_view:layout_constraintVertical_bias="0.653">
 
 
         <LinearLayout
