@@ -148,7 +148,7 @@ public class Reader extends Service implements FloatingViewListener {
                 tss.setSpeechRate(0.9f);
                 if (lang == TextToSpeech.LANG_MISSING_DATA
                         || lang == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Toast.makeText(Reader.this, "Language Not supported", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Reader.this, "Sorry, Language not downloaded !!", Toast.LENGTH_LONG).show();
                     Log.e("TTS", "Language not supported");
                 }
             } else {

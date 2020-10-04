@@ -188,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Select a Language first", Toast.LENGTH_SHORT).show();
         } else {
             showFloatingView(MainActivity.this, true, false);
-            minimizeApp();
         }
 
 
