@@ -417,26 +417,20 @@ public class Reader extends Service implements FloatingViewListener {
                                         Log.i("RestAPI", "VISION " + response.body().getResponses().get(0).getFullTextAnnotation().getText());
                                         extractText = response.body().getResponses().get(0).getFullTextAnnotation().getText();
                                         tss();
-
-
                                     } catch (Exception e) {
-                                        Toast.makeText(Reader.this, "Try Again " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-
+                                        Toast.makeText(Reader.this, "Try Again ", Toast.LENGTH_LONG).show();
                                     }
-
                                 }
-
                             }
                         }
-
                         @Override
                         public void onFailure(Call<VisionModel> call, Throwable t) {
                             Log.i("TAG", "onFailure: " + t.getLocalizedMessage());
-                            Toast.makeText(Reader.this, "Try Again " + t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Reader.this, "File to large to process !! \n Try Again", Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
-                    Toast.makeText(this, "No internet Connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "No internet Connection", Toast.LENGTH_LONG).show();
                 }
 
             }

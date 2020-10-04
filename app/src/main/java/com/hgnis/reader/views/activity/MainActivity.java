@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -166,6 +167,26 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.OPEN)
     public void onViewClicked() {
         showFloatingView(MainActivity.this, true, false);
+        minimizeApp();
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                minimizeApp();
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
+
+    }
+
+    public void minimizeApp() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 
     public void downloadLanguages(View view) {
