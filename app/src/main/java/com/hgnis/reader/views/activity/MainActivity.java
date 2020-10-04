@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.projection.MediaProjectionManager;
@@ -12,7 +13,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -72,7 +75,21 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //installVoiceData();
+    }
 
+    private void installVoiceData() {
+        Intent intent = new Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setPackage("com.google.android.tts"/*replace with the package name of the target TTS engine*/);
+        String TAG = "TTS";
+        try {
+            Log.v(TAG, "Installing voice data: " + intent.toUri(0));
+            startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+            Toast.makeText(this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Failed to install TTS data, no acitivty found for " + intent + ")");
+        }
     }
 
     @Override
@@ -142,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         stopService(serviceIntent);
 
         Log.e("onDestroyActivityStop", "onDestroyActivityStop");
-        showFloatingView(MainActivity.this, true, false);
+        //showFloatingView(MainActivity.this, true, false);
         Log.e("onDestroyActivityShow", "onDestroyActivityShow");
     }
 
@@ -151,4 +168,7 @@ public class MainActivity extends AppCompatActivity {
         showFloatingView(MainActivity.this, true, false);
     }
 
+    public void downloadLanguages(View view) {
+        installVoiceData();
+    }
 }

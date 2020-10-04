@@ -38,7 +38,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.google.gson.JsonArray;
@@ -126,9 +125,6 @@ public class Reader extends Service implements FloatingViewListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        sharedPreferences = this.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        APP_SHARED_PREFS = "targetLanguage";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mgr = (MediaProjectionManager) this.getSystemService(MEDIA_PROJECTION_SERVICE);
@@ -142,23 +138,19 @@ public class Reader extends Service implements FloatingViewListener {
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());
 
-        tss = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    int lang = tss.setLanguage(Locale.getDefault());
-                    tss.setVoice(tss.getVoice());
-                    tss.setPitch(1);
-                    tss.setSpeechRate(0.9f);
-                    if (lang == TextToSpeech.LANG_MISSING_DATA
-                            || lang == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Toast.makeText(Reader.this, "Not supported", Toast.LENGTH_SHORT).show();
-                        Log.e("TTS", "Language not supported");
-                    }
-                } else {
-                    Log.e("TTS", "Initialization failed");
+        tss = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                int lang = tss.setLanguage(Locale.getDefault());
+                tss.setVoice(tss.getVoice());
+                tss.setPitch(1);
+                tss.setSpeechRate(0.9f);
+                if (lang == TextToSpeech.LANG_MISSING_DATA
+                        || lang == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Toast.makeText(Reader.this, "Not supported", Toast.LENGTH_SHORT).show();
+                    Log.e("TTS", "Language not supported");
                 }
+            } else {
+                Log.e("TTS", "Initialization failed");
             }
         });
 
@@ -170,11 +162,6 @@ public class Reader extends Service implements FloatingViewListener {
         if (mFloatingViewManager != null) {
             return START_REDELIVER_INTENT;
         }
-
-       /* if (intent.getAction() == null) {
-            resultCode = intent.getIntExtra(EXTRA_RESULT_CODE, 1337);
-            resultData = intent.getParcelableExtra(EXTRA_RESULT_INTENT);
-        }*/
         windowManager.getDefaultDisplay().getMetrics(metrics);
         inflater = LayoutInflater.from(this);
         iconView = (CircleImageView) inflater.inflate(R.layout.widget_chathead, null, false);

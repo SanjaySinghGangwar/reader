@@ -13,7 +13,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:name="com.hgnis.reader.helper.PrefData"
+        android:name=".helper.PrefData"
         android:allowBackup="false"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -24,17 +24,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-
-
         <activity
-            android:name="com.hgnis.reader.views.activity.MainActivity"
-            android:screenOrientation="portrait">
+            android:name=".views.activity.splashScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".views.activity.MainActivity"
+            android:screenOrientation="portrait">
+
         </activity>
 
         <service
@@ -47,7 +51,6 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="orc" />
-
     </application>
 
 </manifest>

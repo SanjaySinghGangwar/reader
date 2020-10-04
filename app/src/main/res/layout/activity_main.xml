@@ -26,49 +26,38 @@
         card_view:srcCompat="@drawable/start" />
 
     <androidx.cardview.widget.CardView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:foregroundGravity="center"
-        android:visibility="gone"
-        card_view:cardBackgroundColor="@color/primary_light"
+        card_view:cardBackgroundColor="@android:color/white"
         card_view:cardCornerRadius="20dp"
-        card_view:cardElevation="20dp"
+        card_view:cardElevation="30dp"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintHorizontal_bias="0.5"
         card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent">
+        card_view:layout_constraintTop_toBottomOf="@+id/OPEN"
+        card_view:layout_constraintVertical_bias="0.85">
+
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="10">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:layout_weight="9"
-                android:foregroundGravity="center"
-                card_view:srcCompat="@drawable/start" />
+            android:layout_gravity="center"
+            android:layout_margin="15dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
+                android:fontFamily="@font/fontt"
                 android:gravity="center"
-                android:paddingBottom="5dp"
-                android:text="Start Now"
-                android:textStyle="bold" />
+                android:onClick="downloadLanguages"
+                android:text="Download Languages" />
         </LinearLayout>
-
-
     </androidx.cardview.widget.CardView>
 
 
