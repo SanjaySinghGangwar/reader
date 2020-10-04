@@ -36,6 +36,7 @@
         card_view:cardBackgroundColor="@android:color/white"
         card_view:cardCornerRadius="20dp"
         card_view:cardElevation="30dp"
+        android:onClick="downloadLanguages"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
@@ -58,7 +59,6 @@
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:onClick="downloadLanguages"
                 android:text="Download Languages"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -74,6 +74,7 @@
         card_view:cardBackgroundColor="@android:color/white"
         card_view:cardCornerRadius="20dp"
         card_view:cardElevation="30dp"
+        android:onClick="setLanguage"
         card_view:layout_constraintBottom_toTopOf="@+id/cardView"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
@@ -94,7 +95,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:onClick="setLanguage"
+
                 android:text="Set Language"
                 android:textStyle="bold" />
         </LinearLayout>
