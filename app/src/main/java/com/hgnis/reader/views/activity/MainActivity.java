@@ -29,6 +29,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.hgnis.reader.R;
 import com.hgnis.reader.services.Reader;
@@ -60,13 +65,14 @@ public class MainActivity extends AppCompatActivity {
 
     private MediaProjectionManager mgr;
 
-
+    AdView mAdView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         sharedPref();
+        addFreature();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             final String channelId = getString(R.string.default_floatingview_channel_id);
@@ -89,6 +95,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //installVoiceData();
+    }
+
+    private void addFreature() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+            }
+        });
+
+        mAdView = findViewById(R.id.bannerOne);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     private void sharedPref() {
@@ -680,6 +699,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("SelectedLanguage", languageSelected);
                 editor.commit();
                 alertDialog.dismiss();
+                showFloatingView(MainActivity.this, true, false);
             }
 
         });
