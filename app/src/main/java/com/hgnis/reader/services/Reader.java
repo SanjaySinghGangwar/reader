@@ -422,9 +422,7 @@ public class Reader extends Service implements FloatingViewListener {
                                     try {
                                         Log.i("RestAPI", "VISION " + response.body().getResponses().get(0).getFullTextAnnotation().getText());
                                         extractText = response.body().getResponses().get(0).getFullTextAnnotation().getText();
-                                        String langCode = response.body().getResponses().get(0).getTextAnnotations().get(0).getLocale();
                                         tss();
-                                        //textToSpeed();
 
                                     } catch (Exception e) {
                                         Toast.makeText(Reader.this, "Try Again ", Toast.LENGTH_LONG).show();
@@ -451,19 +449,6 @@ public class Reader extends Service implements FloatingViewListener {
         }
 
 
-    }
-
-    private void textToSpeed() {
-        TextToSpeech textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int i) {
-                if (i != TextToSpeech.ERROR) {
-                    Toast.makeText(context, "yes me", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
 

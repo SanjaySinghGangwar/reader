@@ -1,8 +1,11 @@
 <resources>
-    <string name="app_name">Tutor</string>
+    <string name="app_name">Reader</string>
     <string name="running">Tutor at your service</string>
     <string name="default_floatingview_channel_id">default_floatingview_channel</string>
     <string name="default_floatingview_channel_name">Default Channel</string>
     <string name="addMobAddID">ca-app-pub-9041694244207254~7032551329</string>
     <string name="bannerOne">ca-app-pub-9041694244207254/1247045638</string>
+    <string name="LoginVia">Login Via</string>
+    <string name="facebook_app_id">631668990859518</string>
+    <string name="fb_login_protocol_scheme">fb631668990859518</string>
 </resources>

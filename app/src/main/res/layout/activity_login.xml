@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,9 +10,84 @@
     android:orientation="vertical"
     tools:context=".views.activity.login">
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
+    <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/user" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/fontt"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="@string/LoginVia"
+        android:textColor="@android:color/white"
+        android:textSize="30sp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- <com.google.android.gms.common.SignInButton
+             android:id="@+id/sign_in_button"
+             android:layout_gravity="center"
+             android:foregroundGravity="center"
+             android:layout_marginRight="10dp"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />-->
+
+        <!--<com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center" />-->
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="20dp"
+
+            android:foregroundGravity="center_horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/myFaceBookButton"
+                android:layout_width="52dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:src="@drawable/facebook" />
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/sign_in_button"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/google" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="By Clicking Login,\nYou agree to User Agreement And Privacy Policy "
+        android:textColor="@color/colorAccent" />
 </LinearLayout>

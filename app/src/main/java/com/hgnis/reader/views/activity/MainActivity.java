@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -37,6 +38,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.hgnis.reader.R;
 import com.hgnis.reader.services.Reader;
+import com.hgnis.reader.utility.AppSharePreference;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import butterknife.BindView;
@@ -62,10 +64,13 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private String APP_SHARED_PREFS;
-
+    AppSharePreference appSharePreference;
     private MediaProjectionManager mgr;
 
     AdView mAdView;
+    TextView name;
+    TextView times;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         sharedPref();
         addFreature();
+        initilizeALL();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             final String channelId = getString(R.string.default_floatingview_channel_id);
@@ -95,6 +101,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //installVoiceData();
+    }
+
+    private void initilizeALL() {
+        appSharePreference = new AppSharePreference(this);
+        name = findViewById(R.id.Name);
+        times = findViewById(R.id.times);
+        name.setText("Welcome,\n" + appSharePreference.getName());
+        times.setText("Remaining times\n" + appSharePreference.getCounter());
     }
 
     private void addFreature() {
