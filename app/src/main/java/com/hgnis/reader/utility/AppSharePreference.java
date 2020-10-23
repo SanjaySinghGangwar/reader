@@ -38,5 +38,15 @@ public class AppSharePreference {
         editor.commit();
     }
 
+    public String getUID() {
+        return sharedPreferences.getString("UID", "");
+    }
+
+    public void setUID(String UID) {
+        editor.putString("UID", UID);
+        editor.commit();
+
+    }
+
 
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.AccessToken;
@@ -14,7 +15,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -22,12 +22,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.hgnis.reader.R;
 import com.hgnis.reader.utility.AppSharePreference;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -45,16 +51,16 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     AppSharePreference appSharePreference;
     CallbackManager callbackManager;
     LoginButton loginButton;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(getApplicationContext());
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
-
-        googleLoginIntegration();
         initializeALL();
-        facebookLoginIntegration();
+
     }
 
     private void facebookLoginIntegration() {
@@ -67,7 +73,6 @@ public class login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 getProfileDetails(loginResult);
-                sendToHomePage();
             }
 
             @Override
@@ -91,7 +96,6 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         getProfileDetails(loginResult);
-                        sendToHomePage();
                     }
 
                     @Override
@@ -112,21 +116,17 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         if (isLoggedIn) {
             GraphRequest request = GraphRequest.newMeRequest(
                     loginResult.getAccessToken(),
-                    new GraphRequest.GraphJSONObjectCallback() {
-                        @Override
-                        public void onCompleted(JSONObject object, GraphResponse response) {
-                            // Application code
-                            try {
-                                Log.i("Response", response.toString());
+                    (object, response) -> {
+                        // Application code
+                        try {
+                            Log.i("Response", response.toString());
 
-                                String firstName = response.getJSONObject().getString("first_name");
-                                Log.i("Login" + "FirstName", firstName);
-                                appSharePreference.setName(firstName);
-                                sendToHomePage();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            String firstName = response.getJSONObject().getString("first_name");
+                            Log.i("Login" + "FirstName", firstName);
+                            appSharePreference.setName(firstName);
+                            handleFacebookAccessToken(accessToken);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     });
             Bundle parameters = new Bundle();
@@ -139,6 +139,12 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     private void initializeALL() {
         appSharePreference = new AppSharePreference(this);
         appSharePreference.clearPreferences();
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth != null) {
+            Toast.makeText(this, "yes", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "NO", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void googleLoginIntegration() {
@@ -154,6 +160,8 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
         account = GoogleSignIn.getLastSignedInAccount(this);
+        googleLoginIntegration();
+        facebookLoginIntegration();
     }
 
     @Override
@@ -184,8 +192,8 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 
     private void handleGoogleSignInResult(Task<GoogleSignInAccount> task) {
         if (task.isSuccessful()) {
+            firebaseAuthWithGoogle(task.getResult().getIdToken());
             appSharePreference.setName(task.getResult().getDisplayName());
-            sendToHomePage();
         } else if (task.isCanceled()) {
             Toast.makeText(this, "Relax we don't store anything, EveryThing is stored on your phone only ", Toast.LENGTH_SHORT).show();
         } else if (task.isComplete()) {
@@ -193,6 +201,48 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         } else {
             Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            String user = mAuth.getCurrentUser().getUid();
+                            appSharePreference.setUID(user);
+                            sendToHomePage();
+                        } else {
+                            Toast.makeText(login.this, "" + task.getException(), Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d("TAG", "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            String user = mAuth.getCurrentUser().getUid();
+                            appSharePreference.setUID(user);
+                            sendToHomePage();
+
+                        } else {
+                            Toast.makeText(login.this, "" + task.getException(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
     }
 
     private void sendToHomePage() {
@@ -203,7 +253,6 @@ public class login extends AppCompatActivity implements View.OnClickListener {
             Intent i = new Intent(login.this, MainActivity.class);
             startActivity(i);
             finish();
-
         }
 
     }
