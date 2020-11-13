@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
+import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hgnis.reader.R;
@@ -74,7 +75,6 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 public class Reader extends Service implements FloatingViewListener {
     public static final String EXTRA_CUTOUT_SAFE_AREA = "cutout_safe_area";
     public static final int NOTIFICATION_ID = 9083150;
-    /*Screenshot Variables */
     static final int VIRT_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
     public static CircleImageView iconView = null;
     public static Intent resultData = null;
@@ -83,6 +83,8 @@ public class Reader extends Service implements FloatingViewListener {
     public LayoutInflater inflater;
     public WindowManager windowManager;
     public View view;
+    /*Screenshot Variables */
+    RewardedAd rewardedAd;
     Context context = Reader.this;
     DisplayMetrics metrics;
     ImageView crossArrow, tickArrow;
@@ -289,13 +291,16 @@ public class Reader extends Service implements FloatingViewListener {
 
     @Override
     public void onDestroy() {
+
         destroy();
         stopCapture();
         Log.e("onDestroyService", "onDestroyService");
         super.onDestroy();
         tss.stop();
         tss.shutdown();
+
     }
+
 
     @Nullable
     @Override

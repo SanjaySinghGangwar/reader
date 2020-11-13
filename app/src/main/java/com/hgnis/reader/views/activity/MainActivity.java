@@ -26,19 +26,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.hgnis.reader.R;
 import com.hgnis.reader.services.Reader;
 import com.hgnis.reader.utility.AppSharePreference;
+import com.hgnis.reader.utility.NetworkUtils;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import butterknife.BindView;
@@ -47,13 +55,14 @@ import butterknife.OnClick;
 import jp.co.recruit_lifestyle.android.floatingview.FloatingViewManager;
 
 import static com.hgnis.reader.services.Reader.NOTIFICATION_ID;
+import static com.hgnis.reader.utility.NetworkUtils.showAds;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int CHATHEAD_OVERLAY_PERMISSION_REQUEST_CODE = 100;
     private static final int CUSTOM_OVERLAY_PERMISSION_REQUEST_CODE = 101;
     private static final int REQUEST_SCREENSHOT = 59706;
-
+    RewardedAd rewardedAd;
     Intent intent;
     String languageSelected;
     String targetLanguage;
@@ -68,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private MediaProjectionManager mgr;
 
     AdView mAdView;
-    TextView name;
-    TextView times;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +86,14 @@ public class MainActivity extends AppCompatActivity {
         sharedPref();
         addFreature();
         initilizeALL();
+        if (NetworkUtils.isOnline(this)) {
+            showAds(MainActivity.this);
+        }
 
+    }
+
+    private void initilizeALL() {
+        appSharePreference = new AppSharePreference(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             final String channelId = getString(R.string.default_floatingview_channel_id);
             final String channelName = getString(R.string.default_floatingview_channel_name);
@@ -100,23 +114,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        //installVoiceData();
-    }
-
-    private void initilizeALL() {
-        appSharePreference = new AppSharePreference(this);
-        name = findViewById(R.id.Name);
-        times = findViewById(R.id.times);
-        name.setText("Welcome,\n" + appSharePreference.getName());
-        times.setText("Remaining times\n" + appSharePreference.getCounter());
     }
 
     private void addFreature() {
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
+        MobileAds.initialize(this, initializationStatus -> {
 
-            }
         });
 
         mAdView = findViewById(R.id.bannerOne);
@@ -167,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("NewApi")
     private void showFloatingView(Activity activity, boolean isShowOverlayPermission, boolean isCustomFloatingView) {
+
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
             startFloatingViewService(this, isCustomFloatingView);
             return;
@@ -181,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, CHATHEAD_OVERLAY_PERMISSION_REQUEST_CODE);
         }
     }
+
 
     private void startFloatingViewService(Activity activity, boolean isCustomFloatingView) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -200,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         Log.e("onDestroyActivity", "onDestroyActivity");
 
         if (manager != null) {
@@ -213,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("onDestroyActivityStop", "onDestroyActivityStop");
         //showFloatingView(MainActivity.this, true, false);
         Log.e("onDestroyActivityShow", "onDestroyActivityShow");
+
     }
 
     @OnClick(R.id.OPEN)
