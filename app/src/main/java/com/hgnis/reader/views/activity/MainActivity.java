@@ -255,6 +255,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setLanguage(View view) {
+        Intent serviceIntent = new Intent(MainActivity.this, Reader.class);
+        stopService(serviceIntent);
         MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(this);
         View viewLanguage = getLayoutInflater().inflate(R.layout.popup_language, null);
         alert.setView(viewLanguage);
