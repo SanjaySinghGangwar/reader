@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="list">
-
         <item> Afrikaans</item>
         <item> Albanian</item>
         <item> Amharic</item>
@@ -15,8 +14,8 @@
         <item> Bulgarian</item>
         <item> Catalan</item>
         <item> Cebuano</item>
-        <item> Chinese </item>
-        <item> Chinese </item>
+        <item> Chinese (Simplified)</item>
+        <item> Chinese (Traditional)</item>
         <item> Corsican</item>
         <item> Croatian</item>
         <item> Czech</item>

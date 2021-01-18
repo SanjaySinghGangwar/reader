@@ -11,7 +11,6 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,13 +39,13 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hgnis.reader.R;
 import com.hgnis.reader.api.apiInterface;
 import com.hgnis.reader.crop_slider.CropImageView;
 import com.hgnis.reader.helper.ImageTransmogrifier;
+import com.hgnis.reader.utility.AppSharePreference;
 import com.hgnis.reader.utility.NetworkUtils;
 import com.hgnis.reader.visionModel.VisionModel;
 
@@ -62,6 +61,7 @@ import java.util.TreeMap;
 import javax.annotation.Nullable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 import jp.co.recruit_lifestyle.android.floatingview.FloatingViewListener;
 import jp.co.recruit_lifestyle.android.floatingview.FloatingViewManager;
 import retrofit2.Call;
@@ -84,7 +84,7 @@ public class Reader extends Service implements FloatingViewListener {
     public WindowManager windowManager;
     public View view;
     /*Screenshot Variables */
-    RewardedAd rewardedAd;
+
     Context context = Reader.this;
     DisplayMetrics metrics;
     ImageView crossArrow, tickArrow;
@@ -99,17 +99,16 @@ public class Reader extends Service implements FloatingViewListener {
     TextToSpeech tss;
     int count;
     int Ccounter;
-
-
+    AppSharePreference appSharePreference;
     private FloatingViewManager mFloatingViewManager;
     private MediaProjection projection;
     private VirtualDisplay vdisplay;
     private Handler handler;
     private MediaProjectionManager mgr;
     private ImageTransmogrifier it;
-    private SharedPreferences sharedPreferences;
+   /* private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private String APP_SHARED_PREFS;
+    private String APP_SHARED_PREFS;*/
 
     public Reader() {
     }
@@ -127,9 +126,7 @@ public class Reader extends Service implements FloatingViewListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        sharedPreferences = this.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        APP_SHARED_PREFS = "Tutor";
+        appSharePreference = new AppSharePreference(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mgr = (MediaProjectionManager) this.getSystemService(MEDIA_PROJECTION_SERVICE);
             usm = (UsageStatsManager) this.getSystemService(Context.USAGE_STATS_SERVICE);
@@ -141,23 +138,31 @@ public class Reader extends Service implements FloatingViewListener {
         metrics = new DisplayMetrics();
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());
+        initTextToSpeech();
 
+
+
+    }
+
+    private void initTextToSpeech() {
         tss = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
-                int lang = tss.setLanguage(Locale.forLanguageTag(sharedPreferences.getString("targetLanguage", ""))/*Locale.getDefault()*/);/*Locale.getDefault()*//*Locale.forLanguageTag("hi")*/
+                int lang = tss.setLanguage(Locale.forLanguageTag(appSharePreference.getLanguageCode()));
                 tss.setVoice(tss.getVoice());
                 tss.setPitch(1);
                 tss.setSpeechRate(0.9f);
-                if (lang == TextToSpeech.LANG_MISSING_DATA
-                        || lang == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Toast.makeText(Reader.this, "Sorry, Language not downloaded !!", Toast.LENGTH_LONG).show();
-                    Log.e("TTS", "Language not supported");
+                Log.i("TSS ", "Available Languages==========>>" + tss.getAvailableLanguages());
+                if (lang == TextToSpeech.LANG_MISSING_DATA) {
+                    Toasty.error(Reader.this, "Sorry, Language Data Missing").show();
+                    Log.e("TTS", "Language not supported" + lang);
+                } else if (lang == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    //Toasty.error(Reader.this, "Sorry, This Language Not Supported Currently").show();
+
                 }
             } else {
                 Log.e("TTS", "Initialization failed");
             }
         });
-
     }
 
 
@@ -166,6 +171,7 @@ public class Reader extends Service implements FloatingViewListener {
         if (mFloatingViewManager != null) {
             return START_REDELIVER_INTENT;
         }
+        initTextToSpeech();
         windowManager.getDefaultDisplay().getMetrics(metrics);
         inflater = LayoutInflater.from(this);
         iconView = (CircleImageView) inflater.inflate(R.layout.widget_chathead, null, false);
@@ -198,7 +204,6 @@ public class Reader extends Service implements FloatingViewListener {
 
         mFloatingViewManager = new FloatingViewManager(this, this);
         mFloatingViewManager.setFixedTrashIconImage(R.drawable.recycle_bin);
-        //mFloatingViewManager.setActionTrashIconImage(R.drawable.ic_trash_action);
         mFloatingViewManager.setDisplayMode(FloatingViewManager.DISPLAY_MODE_SHOW_ALWAYS);
         mFloatingViewManager.setSafeInsetRect(intent.getParcelableExtra(EXTRA_CUTOUT_SAFE_AREA));
         final FloatingViewManager.Options options = new FloatingViewManager.Options();

@@ -12,7 +12,7 @@ public class AppSharePreference {
     public AppSharePreference(Context mContext) {
         sharedPreferences = mContext.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        APP_SHARED_PREFS = "Tutor";
+        APP_SHARED_PREFS = "Reader";
     }
 
     public void clearPreferences() {
@@ -20,32 +20,22 @@ public class AppSharePreference {
         editor.commit();
     }
 
-    public String getName() {
-        return sharedPreferences.getString("Name", "");
+    public String getLanguage() {
+        return sharedPreferences.getString("Language", "");
     }
 
-    public void setName(String MyName) {
-        editor.putString("Name", MyName);
+    public void setLanguage(String Language) {
+        editor.putString("Language", Language);
         editor.commit();
     }
 
-    public String getCounter() {
-        return sharedPreferences.getString("Counter", "");
+    public String getLanguageCode() {
+        return sharedPreferences.getString("LanguageCode", "");
     }
 
-    public void setCounter(String Counter) {
-        editor.putString("Counter", Counter);
+    public void setLanguageCode(String LanguageCode) {
+        editor.putString("LanguageCode", LanguageCode);
         editor.commit();
-    }
-
-    public String getUID() {
-        return sharedPreferences.getString("UID", "");
-    }
-
-    public void setUID(String UID) {
-        editor.putString("UID", UID);
-        editor.commit();
-
     }
 
 

@@ -1,121 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/colorPrimary"
-    android:gravity="center"
+
     android:orientation="vertical"
     android:weightSum="10"
     tools:context=".views.activity.MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:weightSum="2">
-
-        <TextView
-            android:id="@+id/Name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/times"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center"
-            android:text="sdghdsvc"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:weightSum="2">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center"
-            android:text="Watch Ads To Add Balance to Account"
-            android:textStyle="bold" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:foregroundGravity="center"
-            android:onClick="showAdsToUser"
-            card_view:cardBackgroundColor="@android:color/white"
-            card_view:cardCornerRadius="20dp"
-            card_view:cardElevation="30dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/OPEN"
-            card_view:layout_constraintVertical_bias="0.396"
-            tools:ignore="OnClick">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="15dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="sans-serif-smallcaps"
-                    android:gravity="center"
-                    android:text="Watch Ads"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="7"
+        android:layout_weight="9"
+        android:foregroundGravity="center"
         android:gravity="center"
-        android:orientation="vertical"
-        android:weightSum="10">
+        android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/OPEN"
+            android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -130,13 +37,12 @@
             card_view:srcCompat="@drawable/start" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+            android:id="@+id/downloadLanguages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:foregroundGravity="center"
-            android:onClick="downloadLanguages"
             card_view:cardBackgroundColor="@android:color/white"
             card_view:cardCornerRadius="20dp"
             card_view:cardElevation="30dp"
@@ -160,7 +66,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center"
                     android:text="Download Languages"
                     android:textStyle="bold" />
@@ -168,13 +73,14 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/setLanguages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
+
             android:foregroundGravity="center"
-            android:onClick="setLanguage"
+
             card_view:cardBackgroundColor="@android:color/white"
             card_view:cardCornerRadius="20dp"
             card_view:cardElevation="30dp"
@@ -196,7 +102,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center"
 
                     android:text="Set Language"
@@ -204,15 +109,50 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/donate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:foregroundGravity="center"
+            card_view:cardBackgroundColor="@android:color/white"
+            card_view:cardCornerRadius="20dp"
+            card_view:cardElevation="30dp"
+            card_view:layout_constraintBottom_toTopOf="@+id/cardView"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/OPEN">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Donate"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
-    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/bannerOne"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_weight="1"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/bannerOne"></com.google.android.gms.ads.AdView>
-
+        android:gravity="center"
+        android:text="All Languages may not be support in this app.\nPlease try your Language"
+        android:textColor="@color/colorAccent" />
 
 </LinearLayout>
