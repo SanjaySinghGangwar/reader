@@ -9,7 +9,7 @@ import retrofit2.http.POST;
 
 public interface apiInterface {
 
-    @POST("?key=AIzaSyA7hQ5A_MnRf2TM2yf0nIO61wdqNKPWgyQ")
+    @POST("?key=add new  vision key here")
     Call<VisionModel> visionApi(@Body JsonObject dataToSend);
 
 
